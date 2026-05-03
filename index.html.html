@@ -1,313 +1,726 @@
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formation Make.com — 30 Jours Freelance</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-sans); }
-.wrap { padding: 1.5rem 0; }
-.phase-header {
-  display: flex; align-items: center; gap: 10px;
-  margin: 1.5rem 0 0.75rem;
-}
-.phase-badge {
-  font-size: 11px; font-weight: 500; padding: 3px 10px;
-  border-radius: 20px; white-space: nowrap;
-}
-.phase-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
-.days-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 10px; margin-bottom: 0.5rem;
-}
-.day-card {
-  background: var(--color-background-primary);
-  border: 0.5px solid var(--color-border-tertiary);
-  border-radius: var(--border-radius-lg);
-  padding: 0.75rem 1rem; cursor: pointer;
-  transition: border-color 0.15s;
-}
-.day-card:hover { border-color: var(--color-border-secondary); }
-.day-card.active { border: 1.5px solid #7F77DD; }
-.day-num { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 4px; }
-.day-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); line-height: 1.4; }
-.day-tag {
-  display: inline-block; font-size: 10px; padding: 2px 7px;
-  border-radius: 10px; margin-top: 6px;
-}
-.detail-panel {
-  background: var(--color-background-secondary);
-  border-radius: var(--border-radius-lg);
-  border: 0.5px solid var(--color-border-tertiary);
-  padding: 1.25rem 1.5rem; margin-top: 0.75rem;
-}
-.detail-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.75rem; }
-.detail-section { margin-bottom: 0.75rem; }
-.detail-label { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-.detail-list { list-style: none; padding: 0; }
-.detail-list li { font-size: 13px; color: var(--color-text-secondary); padding: 3px 0; padding-left: 14px; position: relative; line-height: 1.5; }
-.detail-list li::before { content: "→"; position: absolute; left: 0; color: #7F77DD; font-size: 11px; top: 4px; }
-.client-box {
-  background: var(--color-background-primary);
-  border-left: 3px solid #1D9E75;
-  border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
-  padding: 8px 12px; font-size: 13px; color: var(--color-text-secondary);
-  font-style: italic; margin-top: 8px;
-}
-.ask-btn {
-  margin-top: 1rem; font-size: 13px; padding: 7px 16px;
-  border-radius: var(--border-radius-md); cursor: pointer;
-  background: transparent; border: 0.5px solid var(--color-border-secondary);
-  color: var(--color-text-primary);
-}
-.ask-btn:hover { background: var(--color-background-secondary); }
-.prog-bar-wrap { display: flex; gap: 3px; margin-bottom: 1.5rem; }
-.prog-seg { height: 4px; border-radius: 2px; flex: 1; }
+  :root {
+    --orange: #F97316;
+    --orange-dark: #EA580C;
+    --purple: #7C3AED;
+    --green: #10B981;
+    --bg: #0A0A0F;
+    --surface: #12121A;
+    --surface2: #1A1A26;
+    --border: rgba(255,255,255,0.07);
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: #E2E2EE;
+    min-height: 100vh;
+  }
+  h1,h2,h3,h4 { font-family: 'Syne', sans-serif; }
+
+  /* Grid noise texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image: radial-gradient(ellipse 80% 50% at 20% -10%, rgba(124,58,237,0.15) 0%, transparent 60%),
+                      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(249,115,22,0.1) 0%, transparent 60%);
+  }
+
+  .glow-orange { box-shadow: 0 0 40px rgba(249,115,22,0.25); }
+  .glow-purple { box-shadow: 0 0 40px rgba(124,58,237,0.2); }
+
+  /* Phase tabs */
+  .phase-tab { transition: all 0.2s; cursor: pointer; }
+  .phase-tab.active-p1 { background: rgba(249,115,22,0.15); border-color: rgba(249,115,22,0.5); color: #FB923C; }
+  .phase-tab.active-p2 { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.5); color: #34D399; }
+  .phase-tab.active-p3 { background: rgba(124,58,237,0.15); border-color: rgba(124,58,237,0.5); color: #A78BFA; }
+
+  /* Day cards */
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .day-card:hover { border-color: rgba(249,115,22,0.3); transform: translateY(-2px); }
+  .day-card.selected { border-color: rgba(249,115,22,0.6); background: rgba(249,115,22,0.07); }
+
+  /* Detail panel */
+  #detail-panel {
+    background: var(--surface);
+    border: 1px solid rgba(249,115,22,0.25);
+    border-radius: 16px;
+    transition: all 0.3s;
+  }
+
+  /* Progress bar segments */
+  .prog-seg { height: 3px; border-radius: 2px; flex: 1; transition: opacity 0.3s; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+  /* Tag pill */
+  .tag-pill { font-size: 11px; font-weight: 500; letter-spacing: 0.03em; padding: 2px 9px; border-radius: 20px; display: inline-block; }
+
+  /* Stat cards */
+  .stat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; }
+
+  .phase-content { display: none; }
+  .phase-content.active { display: block; }
+
+  /* Checklist items */
+  .check-item { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; }
+  .check-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); margin-top: 7px; flex-shrink: 0; }
+
+  /* Client quote box */
+  .client-quote { border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; background: rgba(16,185,129,0.06); padding: 10px 14px; }
+
+  /* Action button */
+  .action-btn { 
+    background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+    color: white; font-family: 'Syne', sans-serif; font-weight: 600;
+    border: none; border-radius: 10px; padding: 12px 24px; cursor: pointer;
+    transition: all 0.2s; font-size: 14px; letter-spacing: 0.02em;
+  }
+  .action-btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(249,115,22,0.35); }
+
+  .secondary-btn {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    color: #B0B0C8; border-radius: 10px; padding: 10px 20px; cursor: pointer;
+    transition: all 0.2s; font-size: 13px;
+  }
+  .secondary-btn:hover { background: rgba(255,255,255,0.1); color: #E2E2EE; }
+
+  /* Number badge */
+  .num-badge { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; }
+
+  /* Hero orbit */
+  @keyframes orbit { from { transform: rotate(0deg) translateX(70px) rotate(0deg); } to { transform: rotate(360deg) translateX(70px) rotate(-360deg); } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in-up { animation: fadeInUp 0.4s ease forwards; }
+
+  /* Sidebar nav */
+  .nav-day { padding: 6px 10px; border-radius: 7px; cursor: pointer; transition: all 0.15s; font-size: 12px; color: #7070A0; }
+  .nav-day:hover { background: rgba(255,255,255,0.05); color: #B0B0C8; }
+  .nav-day.done { color: var(--green); }
+  .nav-day.current { background: rgba(249,115,22,0.12); color: #FB923C; font-weight: 500; }
+
+  /* Modal overlay */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .modal-box { background: #16161F; border: 1px solid rgba(249,115,22,0.3); border-radius: 20px; max-width: 640px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 32px; position: relative; }
+
+  /* Progress steps */
+  .step-line { width: 1px; background: var(--border); flex-shrink: 0; align-self: stretch; margin: 4px 0; }
+
 </style>
+</head>
+<body class="relative">
 
-<div class="wrap">
+<!-- HERO HEADER -->
+<header class="relative z-10 px-6 pt-16 pb-12 text-center overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:300px;background:radial-gradient(ellipse,rgba(124,58,237,0.12) 0%,transparent 70%);"></div>
+  </div>
+  <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3)">
+    <span style="width:6px;height:6px;border-radius:50%;background:#F97316;display:inline-block;"></span>
+    <span style="font-size:12px;color:#FB923C;font-weight:500;letter-spacing:0.05em">BOOTCAMP FREELANCE · 30 JOURS</span>
+  </div>
+  <h1 style="font-size:clamp(2.2rem,6vw,4rem);font-weight:800;line-height:1.1;margin-bottom:1rem">
+    Maîtrise <span style="color:#F97316">Make.com</span><br>
+    <span style="color:#A78BFA">Booste tes revenus</span>
+  </h1>
+  <p style="font-size:15px;color:#7070A0;max-width:480px;margin:0 auto 2rem;line-height:1.7">
+    30 jours de projets freelance réels. Chaque jour = une compétence monnayable. De zéro à 500–2000€ la mission.
+  </p>
+  <!-- Stat row -->
+  <div class="flex justify-center flex-wrap gap-4 mb-8">
+    <div class="stat-card text-center" style="min-width:110px">
+      <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#F97316">30</div>
+      <div style="font-size:11px;color:#7070A0;margin-top:2px">Jours</div>
+    </div>
+    <div class="stat-card text-center" style="min-width:110px">
+      <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#A78BFA">7</div>
+      <div style="font-size:11px;color:#7070A0;margin-top:2px">Projets clients</div>
+    </div>
+    <div class="stat-card text-center" style="min-width:110px">
+      <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#34D399">2k€</div>
+      <div style="font-size:11px;color:#7070A0;margin-top:2px">Par mission</div>
+    </div>
+    <div class="stat-card text-center" style="min-width:110px">
+      <div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:#60A5FA">0</div>
+      <div style="font-size:11px;color:#7070A0;margin-top:2px">Code requis</div>
+    </div>
+  </div>
 
-<div class="prog-bar-wrap" id="progbar"></div>
+  <!-- Global progress -->
+  <div style="max-width:560px;margin:0 auto">
+    <div class="flex justify-between mb-2" style="font-size:11px;color:#7070A0">
+      <span>Progression globale</span>
+      <span id="progress-pct">0 / 30 jours</span>
+    </div>
+    <div class="flex gap-1" id="global-progress-bar" style="height:4px;border-radius:4px;overflow:hidden;background:rgba(255,255,255,0.06)">
+      <div id="progress-fill" style="height:100%;background:linear-gradient(90deg,#F97316,#A78BFA);border-radius:4px;width:0%;transition:width 0.4s"></div>
+    </div>
+  </div>
+</header>
 
-<div id="phases-container"></div>
-<div id="detail-panel" style="display:none"></div>
+<!-- MAIN LAYOUT -->
+<main class="relative z-10 max-w-6xl mx-auto px-4 pb-20">
+
+  <!-- PHASE NAVIGATION -->
+  <div class="flex gap-3 mb-8 flex-wrap">
+    <button onclick="showPhase(1)" id="tab-p1" class="phase-tab active-p1 flex-1 min-w-[160px] px-5 py-3 rounded-xl border text-sm font-medium" style="border-color:rgba(249,115,22,0.5);background:rgba(249,115,22,0.15);color:#FB923C;font-family:'Syne',sans-serif">
+      <div style="font-size:10px;opacity:0.7;margin-bottom:2px">J1–J7</div>
+      Phase 1 · Fondations
+    </button>
+    <button onclick="showPhase(2)" id="tab-p2" class="phase-tab flex-1 min-w-[160px] px-5 py-3 rounded-xl border text-sm font-medium" style="border-color:rgba(255,255,255,0.08);color:#7070A0;font-family:'Syne',sans-serif">
+      <div style="font-size:10px;opacity:0.7;margin-bottom:2px">J8–J21</div>
+      Phase 2 · Projets clients
+    </button>
+    <button onclick="showPhase(3)" id="tab-p3" class="phase-tab flex-1 min-w-[160px] px-5 py-3 rounded-xl border text-sm font-medium" style="border-color:rgba(255,255,255,0.08);color:#7070A0;font-family:'Syne',sans-serif">
+      <div style="font-size:10px;opacity:0.7;margin-bottom:2px">J22–J30</div>
+      Phase 3 · Expert & Freelance
+    </button>
+  </div>
+
+  <!-- PHASE 1 CONTENT -->
+  <div id="phase-1" class="phase-content active">
+    <div class="mb-5">
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#FB923C;margin-bottom:4px">Fondations Make.com</h2>
+      <p style="font-size:13px;color:#7070A0">Maîtrise les bases pour construire n'importe quelle automatisation client.</p>
+    </div>
+    <div id="grid-p1" class="grid grid-cols-1 gap-3 mb-6" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))"></div>
+  </div>
+
+  <!-- PHASE 2 CONTENT -->
+  <div id="phase-2" class="phase-content">
+    <div class="mb-5">
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#34D399;margin-bottom:4px">Projets clients réels</h2>
+      <p style="font-size:13px;color:#7070A0">7 projets que des clients paient vraiment — livrables directs.</p>
+    </div>
+    <div id="grid-p2" class="grid grid-cols-1 gap-3 mb-6" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))"></div>
+  </div>
+
+  <!-- PHASE 3 CONTENT -->
+  <div id="phase-3" class="phase-content">
+    <div class="mb-5">
+      <h2 style="font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#A78BFA;margin-bottom:4px">Expert & Lancement Freelance</h2>
+      <p style="font-size:13px;color:#7070A0">Tarifer, vendre, livrer — construire ton business.</p>
+    </div>
+    <div id="grid-p3" class="grid grid-cols-1 gap-3 mb-6" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))"></div>
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div id="detail-panel" class="hidden mt-6 p-6">
+    <div id="detail-content"></div>
+  </div>
+
+</main>
+
+<!-- MODAL for "Démarrer ce jour" -->
+<div id="modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <button onclick="closeModal()" style="position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.06);border:none;color:#7070A0;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px">✕ Fermer</button>
+    <div id="modal-content"></div>
+  </div>
 </div>
 
 <script>
+// ========== DATA ==========
 const phases = [
   {
-    name: "Phase 1 — Fondations", days: "J1–J7",
-    color: "#EEEDFE", textColor: "#534AB7", borderColor: "#AFA9EC",
-    tagBg: "#EEEDFE", tagText: "#534AB7",
-    days_data: [
-      { d: "J1", title: "C'est quoi Make ?", tag: "Théorie",
+    id: 1, color: '#F97316', colorLight: 'rgba(249,115,22,0.15)', borderColor: 'rgba(249,115,22,0.35)',
+    tagBg: 'rgba(249,115,22,0.15)', tagColor: '#FB923C',
+    days: [
+      {
+        d: "J1", title: "C'est quoi Make ?", tag: "Théorie", duration: "2h",
         objectifs: ["Comprendre la différence Make vs Zapier vs n8n", "Installer et configurer son compte Make gratuit", "Découvrir l'interface : scénarios, modules, connexions"],
-        exercice: "Créer ton premier scénario : quand un formulaire Google est soumis → envoyer un email Gmail",
-        client: "Un client te demande : 'C'est quoi Make ?' → tu sais lui répondre avec des exemples concrets.",
-        prompt: "Explique-moi Make.com en détail pour un débutant qui veut faire du freelance"
+        exercice: "Créer ton premier scénario : quand un formulaire Google est soumis → envoyer un email Gmail automatiquement",
+        outils: ["Make.com (gratuit)", "Google Forms", "Gmail"],
+        valeur: "Base indispensable",
+        client: "Un client te demande : 'C'est quoi Make ?' — tu sais lui répondre avec des exemples concrets et chiffrer une mission.",
+        tips: ["Commence par le plan gratuit, il suffit pour apprendre", "Regarde les templates Make pour t'inspirer avant de créer"],
+        ressources: "make.com/en/help/getting-started"
       },
-      { d: "J2", title: "Modules & Connexions", tag: "Pratique",
+      {
+        d: "J2", title: "Modules & Connexions", tag: "Pratique", duration: "3h",
         objectifs: ["Connecter Gmail, Google Sheets, Airtable", "Comprendre triggers vs actions", "Gérer les erreurs basiques"],
-        exercice: "Connecter 3 apps entre elles : Typeform → Google Sheets → Slack notification",
-        client: "Projet réel : collecte de leads automatique depuis un formulaire vers une base de données",
-        prompt: "Donne-moi un exercice pratique Make.com pour connecter Typeform, Google Sheets et Slack"
+        exercice: "Connecter 3 apps : Typeform → Google Sheets → notification Slack en temps réel",
+        outils: ["Typeform", "Google Sheets", "Slack"],
+        valeur: "Projet : 200–400€",
+        client: "Projet réel : collecte de leads automatique depuis un formulaire vers une base de données — évite 1h de copier-coller par jour.",
+        tips: ["Teste chaque module séparément avant de les connecter", "Utilise 'Run once' pour déboguer sans consommer d'opérations"],
+        ressources: "make.com/en/integrations"
       },
-      { d: "J3", title: "Gestion des données", tag: "Pratique",
-        objectifs: ["Mapper les champs entre modules", "Filtres et conditions (Router)", "Transformer du texte, des dates, des chiffres"],
-        exercice: "Router différents types de leads vers différentes feuilles selon leur budget",
-        client: "Un client veut trier ses prospects automatiquement selon leur taille d'entreprise",
-        prompt: "Comment utiliser le Router dans Make.com avec un exemple de tri de leads par budget ?"
+      {
+        d: "J3", title: "Gestion des données", tag: "Pratique", duration: "3h",
+        objectifs: ["Mapper les champs entre modules", "Filtres et conditions (Router)", "Transformer texte, dates, chiffres"],
+        exercice: "Router différents types de leads vers différentes feuilles Google Sheets selon leur budget déclaré",
+        outils: ["Make Router", "Google Sheets", "Fonctions de texte"],
+        valeur: "Compétence clé",
+        client: "Un client veut trier ses prospects automatiquement selon leur taille d'entreprise — sans toucher au CRM manuellement.",
+        tips: ["Le Router est la fonction la plus vendue chez les clients", "Apprends les fonctions : formatDate(), toString(), parseNumber()"],
+        ressources: "make.com/en/help/tools/router"
       },
-      { d: "J4", title: "Gestion des erreurs", tag: "Pro",
-        objectifs: ["Comprendre les erreurs communes dans Make", "Mettre en place des error handlers", "Créer des alertes quand un scénario échoue"],
-        exercice: "Ajouter un error handler qui t'envoie un SMS Twilio si le scénario plante",
-        client: "Ton client appelle à 3h du matin car son scénario a planté — tu dois savoir éviter ça",
-        prompt: "Comment gérer les erreurs dans Make.com comme un pro ? Montre-moi les error handlers"
+      {
+        d: "J4", title: "Gestion des erreurs", tag: "Pro", duration: "2h",
+        objectifs: ["Comprendre les erreurs communes dans Make", "Mettre en place des error handlers", "Créer des alertes si le scénario échoue"],
+        exercice: "Ajouter un error handler qui t'envoie un SMS Twilio si le scénario plante en production",
+        outils: ["Make Error Handler", "Twilio ou Gmail", "Slack"],
+        valeur: "Différenciateur majeur",
+        client: "Ton client appelle à 3h du matin car son scénario a planté — la gestion d'erreurs pro, c'est ce qui justifie ta maintenance mensuelle.",
+        tips: ["Toujours tester les cas d'échec, pas seulement le cas nominal", "Un scénario sans error handler = une bombe à retardement"],
+        ressources: "make.com/en/help/errors"
       },
-      { d: "J5", title: "Webhooks entrants", tag: "Avancé",
+      {
+        d: "J5", title: "Webhooks entrants", tag: "Avancé", duration: "3h",
         objectifs: ["Créer un webhook Make", "Recevoir des données externes", "Tester avec Postman ou curl"],
-        exercice: "Recevoir un webhook depuis Stripe et créer une ligne dans Google Sheets à chaque paiement",
-        client: "Projet freelance : notifier le client sur Slack à chaque nouveau paiement reçu",
-        prompt: "Tutoriel complet webhooks entrants sur Make.com avec exemple Stripe"
+        exercice: "Recevoir un webhook depuis Stripe et créer une ligne dans Google Sheets à chaque paiement reçu",
+        outils: ["Make Webhooks", "Stripe", "Postman (test)"],
+        valeur: "Compétence rare",
+        client: "Notifier le client sur Slack à chaque nouveau paiement — en temps réel, sans polling, sans retard.",
+        tips: ["Utilise requestbin.com pour inspecter les webhooks avant de les connecter à Make", "Stripe, Shopify, WooCommerce — tous supportent les webhooks"],
+        ressources: "make.com/en/help/tools/webhooks"
       },
-      { d: "J6", title: "Webhooks sortants & HTTP", tag: "Avancé",
+      {
+        d: "J6", title: "Webhooks sortants & HTTP", tag: "Avancé", duration: "4h",
         objectifs: ["Faire des requêtes HTTP vers des APIs", "Authentification Bearer Token / API Key", "Parser une réponse JSON"],
         exercice: "Appeler l'API Notion pour créer automatiquement des pages depuis un Google Sheet",
-        client: "Intégrer n'importe quelle app non native Make via son API — compétence très vendue",
-        prompt: "Comment faire des requêtes HTTP dans Make.com pour intégrer une API externe ?"
+        outils: ["Make HTTP module", "Notion API", "JSON parser"],
+        valeur: "Intégration illimitée",
+        client: "Intégrer n'importe quelle app non native Make via son API — compétence la plus vendue, justifie 800–1500€ la mission.",
+        tips: ["Lis toujours la doc API avant de coder dans Make", "Commence par GET avant de faire des POST/PUT"],
+        ressources: "make.com/en/help/tools/http"
       },
-      { d: "J7", title: "Projet semaine 1", tag: "Projet",
+      {
+        d: "J7", title: "Projet semaine 1", tag: "Projet", duration: "5h",
         objectifs: ["Construire un système complet de bout en bout", "Documenter le scénario pour un client", "Calculer le temps économisé"],
-        exercice: "Système de gestion des leads : formulaire → CRM Airtable → email de bienvenue personnalisé → notification Slack",
-        client: "Livrable freelance : automatisation de la capture et qualification de leads (valeur : 300–600€)",
-        prompt: "Aide-moi à construire un système complet de gestion des leads sur Make.com étape par étape"
+        exercice: "Système de gestion des leads : formulaire → CRM Airtable → email personnalisé → notification Slack",
+        outils: ["Tous les outils J1–J6", "Airtable", "PDFMonkey (optionnel)"],
+        valeur: "300–600€ livrables",
+        client: "Ton premier livrable freelance : automatisation complète de la capture et qualification de leads.",
+        tips: ["Documente chaque module avec des notes dans Make", "Fais une vidéo Loom de 5 min pour présenter le livrable"],
+        ressources: "airtable.com/api"
       }
     ]
   },
   {
-    name: "Phase 2 — Projets clients réels", days: "J8–J21",
-    color: "#E1F5EE", textColor: "#0F6E56", borderColor: "#5DCAA5",
-    tagBg: "#E1F5EE", tagText: "#0F6E56",
-    days_data: [
-      { d: "J8–9", title: "Projet : Automatiser les factures", tag: "Finance",
-        objectifs: ["Recevoir une commande → générer une facture PDF", "Envoyer par email au client", "Logger dans Google Sheets ou Airtable"],
-        exercice: "Typeform ou Jotform → Make → générer PDF (PDFMonkey) → Gmail → Airtable",
-        client: "Cas réel : 'Mon client passe 4h/semaine à créer des factures manuellement'",
-        prompt: "Construis avec moi un scénario Make.com complet pour automatiser la génération et l'envoi de factures PDF"
+    id: 2, color: '#10B981', colorLight: 'rgba(16,185,129,0.12)', borderColor: 'rgba(16,185,129,0.4)',
+    tagBg: 'rgba(16,185,129,0.12)', tagColor: '#34D399',
+    days: [
+      {
+        d: "J8–9", title: "Automatiser les factures", tag: "Finance", duration: "6h",
+        objectifs: ["Recevoir une commande → générer une facture PDF", "Envoyer par email au client automatiquement", "Logger dans Google Sheets ou Airtable"],
+        exercice: "Typeform → Make → PDFMonkey (PDF facture) → Gmail → Airtable (log)",
+        outils: ["PDFMonkey ou DocuPilot", "Gmail", "Airtable", "Typeform"],
+        valeur: "400–800€ one-shot",
+        client: "'Mon client passe 4h/semaine à créer des factures manuellement' — ce projet lui fait économiser 200h/an.",
+        tips: ["PDFMonkey a une offre gratuite pour tester", "Génère un numéro de facture auto-incrémenté avec un Datastore Make", "Ajoute la TVA automatiquement selon le pays du client"],
+        ressources: "pdfmonkey.io/docs"
       },
-      { d: "J10–11", title: "Projet : Onboarding client", tag: "CRM",
-        objectifs: ["Automatiser l'accueil d'un nouveau client", "Créer ses accès, envoyer ses documents", "Notifier l'équipe interne"],
-        exercice: "Stripe paiement → créer profil Notion + Google Drive folder + email bienvenue + Slack alerte",
-        client: "Agences, coachs, SaaS : économisent 2h par nouveau client",
-        prompt: "Crée un scénario Make.com d'onboarding automatique pour un coach après un paiement Stripe"
+      {
+        d: "J10–11", title: "Onboarding client auto", tag: "CRM", duration: "6h",
+        objectifs: ["Automatiser l'accueil d'un nouveau client", "Créer ses accès et ses documents", "Notifier l'équipe interne"],
+        exercice: "Stripe paiement → profil Notion + Google Drive folder + email bienvenue + Slack alerte équipe",
+        outils: ["Stripe", "Notion API", "Google Drive", "Gmail", "Slack"],
+        valeur: "500–900€ one-shot",
+        client: "Agences, coachs, SaaS — économisent 2h par nouveau client. À 20 clients/mois, c'est 40h récupérées.",
+        tips: ["Crée un template Notion réutilisable pour chaque client", "Personnalise l'email avec le prénom et le produit acheté"],
+        ressources: "developers.notion.com"
       },
-      { d: "J12–13", title: "Projet : Suivi des relances", tag: "Ventes",
-        objectifs: ["Automatiser les relances de devis non signés", "Envoyer des séquences d'emails espacées", "Stopper si le client répond"],
-        exercice: "Airtable (devis) → Make scheduler → email relance J+3, J+7, J+14 → stopper si statut change",
-        client: "PME : 'Je perds des clients car j'oublie de relancer mes devis'",
-        prompt: "Comment créer une séquence automatique de relances dans Make.com avec Airtable ?"
+      {
+        d: "J12–13", title: "Séquence de relances", tag: "Ventes", duration: "5h",
+        objectifs: ["Automatiser les relances de devis non signés", "Envoyer des emails espacés (J+3, J+7, J+14)", "Stopper si le client répond ou signe"],
+        exercice: "Airtable (devis) → Make scheduler → email relance → stopper si statut = 'signé'",
+        outils: ["Airtable", "Gmail", "Make Scheduler"],
+        valeur: "350–700€",
+        client: "'Je perds des clients car j'oublie de relancer mes devis' — ce scénario augmente le taux de conversion de 20–40%.",
+        tips: ["Limite à 3 relances max pour ne pas spammer", "Varie le message à chaque relance (angle différent)"],
+        ressources: "airtable.com/guides/automations"
       },
-      { d: "J14–15", title: "Projet : Gestion des réseaux sociaux", tag: "Marketing",
+      {
+        d: "J14–15", title: "Réseaux sociaux auto", tag: "Marketing", duration: "5h",
         objectifs: ["Programmer des publications multi-plateformes", "Recycler du contenu automatiquement", "Monitorer les mentions de marque"],
-        exercice: "Google Sheet de contenu → Make scheduler → publier sur Twitter, LinkedIn, Facebook en même temps",
-        client: "Créateurs de contenu, agences marketing : valeur 200–500€/mois",
-        prompt: "Automatise la publication de contenu sur plusieurs réseaux sociaux avec Make.com"
+        exercice: "Google Sheet de contenu → Make scheduler → publier sur LinkedIn, Twitter, Facebook simultanément",
+        outils: ["Buffer ou SocialBee", "Google Sheets", "Make Scheduler"],
+        valeur: "200–500€/mois",
+        client: "Créateurs de contenu, agences : économisent 10h/semaine de publication manuelle.",
+        tips: ["Adapte le format du texte à chaque réseau (longueur, hashtags)", "Ajoute une colonne 'statut' dans le Sheet pour tracker les publications"],
+        ressources: "buffer.com/api"
       },
-      { d: "J16–17", title: "Projet : Support client IA", tag: "IA",
-        objectifs: ["Connecter OpenAI/Claude à Make", "Répondre automatiquement aux emails entrants", "Escalader les cas complexes à un humain"],
-        exercice: "Gmail entrant → Make → OpenAI API (classer + répondre) → si complexe → notifier sur Slack",
-        client: "E-commerce, SaaS : 'Je reçois 50 emails/jour, je veux automatiser les FAQ'",
-        prompt: "Crée un système de support client IA avec Make.com et OpenAI pour répondre aux emails automatiquement"
+      {
+        d: "J16–17", title: "Support client IA", tag: "IA", duration: "7h",
+        objectifs: ["Connecter OpenAI à Make", "Répondre automatiquement aux emails FAQ", "Escalader les cas complexes à un humain"],
+        exercice: "Gmail entrant → Make → OpenAI GPT-4 (classifier + répondre) → si complexe → notifier sur Slack",
+        outils: ["OpenAI API", "Gmail", "Slack", "Make HTTP module"],
+        valeur: "800–1500€",
+        client: "'Je reçois 50 emails/jour, je veux automatiser les FAQ' — 70% des emails traités sans intervention humaine.",
+        tips: ["Commence par classifier (catégorie) avant de répondre", "Garde toujours une option pour escalader vers un humain"],
+        ressources: "platform.openai.com/docs"
       },
-      { d: "J18–19", title: "Projet : Rapport hebdo automatique", tag: "Analytics",
-        objectifs: ["Collecter des données de plusieurs sources", "Générer un rapport formaté", "Envoyer par email chaque lundi matin"],
-        exercice: "Google Analytics + Stripe + Airtable → Make (lundi 8h) → créer Google Doc rapport → email CEO",
-        client: "Dirigeants d'entreprise : 'Je veux un rapport automatique sans demander à mon équipe'",
-        prompt: "Comment créer un rapport hebdomadaire automatique avec Make.com qui agrège des données de plusieurs sources ?"
+      {
+        d: "J18–19", title: "Rapport hebdo auto", tag: "Analytics", duration: "5h",
+        objectifs: ["Collecter des données de plusieurs sources", "Générer un rapport formaté chaque lundi", "Envoyer par email au dirigeant"],
+        exercice: "Google Analytics + Stripe + Airtable → Make (lundi 8h) → Google Doc rapport → email CEO",
+        outils: ["Google Analytics API", "Stripe API", "Google Docs", "Gmail"],
+        valeur: "400–700€",
+        client: "Dirigeants : 'Je veux un rapport automatique sans demander à mon équipe' — gain de 3h/semaine.",
+        tips: ["Formate les chiffres lisiblement (K€, %, variation vs semaine précédente)", "Ajoute un graphique simple avec Google Charts"],
+        ressources: "developers.google.com/analytics"
       },
-      { d: "J20–21", title: "Projet : E-commerce automation", tag: "E-commerce",
-        objectifs: ["Gérer le cycle de vie commande", "Alertes stock faible", "Relances panier abandonné"],
-        exercice: "Shopify ordre → Make → mettre à jour Airtable + email confirmation + si stock<5 → alerter fournisseur",
-        client: "Boutique Shopify : 'Je veux automatiser toute la logistique de mes commandes'",
-        prompt: "Automatise un e-commerce Shopify avec Make.com : commandes, stock et relances paniers abandonnés"
+      {
+        d: "J20–21", title: "E-commerce automation", tag: "E-commerce", duration: "7h",
+        objectifs: ["Gérer le cycle de vie des commandes", "Alertes stock faible automatiques", "Relances paniers abandonnés"],
+        exercice: "Shopify ordre → Airtable mise à jour + email confirmation + si stock<5 → alerter fournisseur",
+        outils: ["Shopify API", "Airtable", "Gmail", "Slack"],
+        valeur: "600–1200€",
+        client: "Boutique Shopify : 'Je veux automatiser toute la logistique de mes commandes' — 5h/jour économisées.",
+        tips: ["Shopify a un excellent support webhook natif", "Crée un tableau de bord Airtable pour suivre les stocks en temps réel"],
+        ressources: "shopify.dev/api"
       }
     ]
   },
   {
-    name: "Phase 3 — Niveau Expert & Freelance", days: "J22–J30",
-    color: "#FAEEDA", textColor: "#854F0B", borderColor: "#EF9F27",
-    tagBg: "#FAEEDA", tagText: "#854F0B",
-    days_data: [
-      { d: "J22–23", title: "Variables, Datastores & itération", tag: "Expert",
-        objectifs: ["Utiliser les Datastores Make pour stocker de l'état", "Itérer sur des tableaux (Array aggregator)", "Construire des scénarios avec mémoire"],
-        exercice: "Système de scoring de leads qui s'accumule dans un Datastore au fil des interactions",
-        client: "Automatisations complexes multi-étapes qui 'se souviennent' du contexte",
-        prompt: "Explique-moi les Datastores et l'itération dans Make.com avec un exemple de scoring de leads"
+    id: 3, color: '#7C3AED', colorLight: 'rgba(124,58,237,0.15)', borderColor: 'rgba(124,58,237,0.4)',
+    tagBg: 'rgba(124,58,237,0.15)', tagColor: '#A78BFA',
+    days: [
+      {
+        d: "J22–23", title: "Datastores & itération", tag: "Expert", duration: "5h",
+        objectifs: ["Utiliser les Datastores pour stocker l'état", "Itérer sur des tableaux (Array aggregator)", "Construire des scénarios avec mémoire"],
+        exercice: "Système de scoring de leads qui s'accumule dans un Datastore au fil des interactions client",
+        outils: ["Make Datastores", "Array Aggregator", "Iterator"],
+        valeur: "Niveau Expert",
+        client: "Automatisations complexes multi-étapes qui 'se souviennent' du contexte — justifie des tarifs 2x plus élevés.",
+        tips: ["Les Datastores sont limités en plan gratuit — attention à la taille", "Toujours nettoyer le Datastore après utilisation"],
+        ressources: "make.com/en/help/tools/data-store"
       },
-      { d: "J24", title: "Scénarios imbriqués & modularité", tag: "Expert",
+      {
+        d: "J24", title: "Scénarios modulaires", tag: "Expert", duration: "4h",
         objectifs: ["Appeler un scénario depuis un autre (sous-scénarios)", "Créer des modules réutilisables", "Organiser de gros projets proprement"],
         exercice: "Créer un scénario 'send-email' réutilisable appelé par 5 autres scénarios différents",
-        client: "Pour des clients avec des automatisations complexes — maintenance facile = clients fidèles",
-        prompt: "Comment créer des scénarios modulaires et réutilisables dans Make.com ?"
+        outils: ["Make Webhooks (inter-scénarios)", "Google Sheets config", "Documentation"],
+        valeur: "Maintenance facile",
+        client: "Pour des clients avec des automatisations complexes — la modularité = maintenance facile = clients fidèles sur le long terme.",
+        tips: ["Nomme tes scénarios clairement : [CLIENT]-[FONCTION]-[DATE]", "Un scénario = une responsabilité unique"],
+        ressources: "make.com/en/help/scenarios/calling-scenarios"
       },
-      { d: "J25", title: "Tarifer & vendre une mission Make", tag: "Business",
+      {
+        d: "J25", title: "Tarifer & vendre", tag: "Business", duration: "3h",
         objectifs: ["Calculer le ROI pour un client", "Structures tarifaires : fixe, mensuel, au résultat", "Rédiger une proposition commerciale"],
-        exercice: "Rédiger une proposition pour le projet de factures automatiques (J8–9) avec tarif",
-        client: "Savoir se vendre : 500–2000€ one-shot + 100–500€/mois maintenance",
-        prompt: "Comment tarifer et vendre une mission d'automatisation Make.com à un client PME ?"
+        exercice: "Rédiger une proposition complète pour le projet de factures automatiques avec tarif justifié",
+        outils: ["Google Docs", "Canva (optionnel)", "Notion (template)"],
+        valeur: "500–2000€/mission",
+        client: "Formule : (temps économisé/semaine × 50€/h × 52 semaines) = valeur annuelle. Prends 10–20% de cette valeur.",
+        tips: ["Ne vends jamais 'des heures de Make' — vends un résultat chiffré", "Propose toujours 3 options : Basic / Pro / Premium"],
+        ressources: "malt.fr/experience/automatisation"
       },
-      { d: "J26", title: "Livrer & documenter un projet", tag: "Business",
+      {
+        d: "J26", title: "Livrer & documenter", tag: "Business", duration: "3h",
         objectifs: ["Créer une documentation claire pour le client", "Faire une vidéo Loom de présentation", "Checklist de livraison professionnelle"],
-        exercice: "Documenter le scénario de facturation (J8–9) comme si tu le livrais à un vrai client",
-        client: "La documentation professionnelle justifie des prix élevés et crée de la confiance",
-        prompt: "Quelle est la meilleure façon de documenter et livrer un projet Make.com à un client ?"
+        exercice: "Documenter le scénario de facturation (J8–9) comme si tu le livrais à un vrai client aujourd'hui",
+        outils: ["Loom (vidéo gratuit)", "Notion", "Google Docs"],
+        valeur: "Confiance + fidélité",
+        client: "Une documentation professionnelle justifie des prix élevés, crée de la confiance, et génère des recommandations.",
+        tips: ["Vidéo Loom de 5–10 min > documentation écrite de 10 pages", "Inclus toujours une section FAQ dans ta doc"],
+        ressources: "loom.com"
       },
-      { d: "J27", title: "Maintenance & monitoring", tag: "Pro",
-        objectifs: ["Mettre en place des alertes de surveillance", "Gérer les mises à jour d'API clientes", "Créer un tableau de bord d'état des scénarios"],
-        exercice: "Scénario qui surveille tous tes autres scénarios et t'alerte si l'un est désactivé ou en erreur",
-        client: "Offrir du support mensuel = revenus récurrents, la clé du freelance stable",
-        prompt: "Comment surveiller et maintenir des scénarios Make.com pour des clients en production ?"
+      {
+        d: "J27", title: "Maintenance & monitoring", tag: "Pro", duration: "3h",
+        objectifs: ["Mettre en place des alertes de surveillance", "Gérer les mises à jour d'API clientes", "Créer un tableau de bord d'état"],
+        exercice: "Scénario qui surveille tous tes autres scénarios et t'alerte par email si l'un est désactivé",
+        outils: ["Make scheduling", "Gmail", "Google Sheets dashboard"],
+        valeur: "100–300€/mois récurrents",
+        client: "Offrir du support mensuel = revenus récurrents stables — la clé d'un freelance qui ne stresse pas pour ses rentrées.",
+        tips: ["Vends la maintenance AVANT de livrer le projet", "Checklist mensuelle : vérifier logs, tester les scénarios, mettre à jour les tokens"],
+        ressources: "make.com/en/help/scenarios/scheduling"
       },
-      { d: "J28", title: "Projet capstone : Audit complet", tag: "Projet",
-        objectifs: ["Analyser les besoins d'une entreprise fictive", "Cartographier tous les processus à automatiser", "Prioriser et chiffrer chaque automatisation"],
-        exercice: "Auditer 'BricoShop' : e-commerce, 3 employés, 100 commandes/mois — quoi automatiser en priorité ?",
-        client: "Compétence rare et valorisée : savoir identifier les opportunités d'automatisation chez un client",
-        prompt: "Aide-moi à faire un audit d'automatisation complet pour une PME e-commerce avec Make.com"
+      {
+        d: "J28", title: "Audit complet client", tag: "Projet", duration: "5h",
+        objectifs: ["Analyser les besoins d'une entreprise", "Cartographier tous les processus à automatiser", "Prioriser et chiffrer chaque automatisation"],
+        exercice: "Auditer 'BricoShop' : e-commerce 3 employés, 100 commandes/mois — quoi automatiser en priorité ?",
+        outils: ["Notion (audit template)", "Miro ou FigJam", "Google Sheets (ROI calc)"],
+        valeur: "500–1000€ (l'audit seul)",
+        client: "Compétence rare et valorisée : identifier les opportunités d'automatisation chez un client — souvent facturable séparément.",
+        tips: ["Commence toujours par les tâches répétitives qui prennent >2h/semaine", "L'audit peut être vendu 300–500€ et crédité sur le projet"],
+        ressources: "notion.so/templates"
       },
-      { d: "J29–30", title: "Construire ton offre freelance", tag: "Lancement",
-        objectifs: ["Définir ta niche (e-commerce ? agences ? coachs ?)", "Créer 3 offres packagées avec prix clairs", "Rédiger ta page LinkedIn / Malt / Upwork"],
-        exercice: "Publier ton profil Malt ou LinkedIn avec tes 3 offres Make et 2 études de cas (J7 + J8)",
-        client: "À la fin du jour 30, tu as un profil, des offres, des projets livrables — tu peux prospecter",
-        prompt: "Aide-moi à créer mon offre freelance Make.com avec 3 packages tarifés pour me lancer"
+      {
+        d: "J29–30", title: "Lancer son offre freelance", tag: "Lancement", duration: "6h",
+        objectifs: ["Définir ta niche (e-commerce, agences, coachs...)", "Créer 3 offres packagées avec prix clairs", "Publier profil Malt / LinkedIn / Upwork"],
+        exercice: "Publier ton profil Malt avec tes 3 offres Make et 2 études de cas (J7 + J8–9)",
+        outils: ["Malt.fr", "LinkedIn", "Canva (portfolio)"],
+        valeur: "Ton activité lancée",
+        client: "À la fin du jour 30, tu as : un profil, des offres, des livrables réels. Tu peux prospecter dès aujourd'hui.",
+        tips: ["Sur Malt : 'Expert Make.com — Automatisation pour PME' converti mieux que 'No-code'", "Partage tes 2 projets comme études de cas sur LinkedIn"],
+        ressources: "malt.fr/c/no-code"
       }
     ]
   }
 ];
 
-const progbar = document.getElementById('progbar');
-const phasesContainer = document.getElementById('phases-container');
-const detailPanel = document.getElementById('detail-panel');
+let currentPhase = 1;
+let selectedDayKey = null;
+let completedDays = JSON.parse(localStorage.getItem('make-completed') || '[]');
 
-let selectedDay = null;
+// ========== RENDER ==========
+function getPhaseColor(phaseId) {
+  return phases[phaseId-1].color;
+}
 
-phases.forEach((phase, pi) => {
-  phase.days_data.forEach(() => {
-    const seg = document.createElement('div');
-    seg.className = 'prog-seg';
-    seg.style.background = phase.borderColor;
-    progbar.appendChild(seg);
-  });
-
-  const phDiv = document.createElement('div');
-
-  const header = document.createElement('div');
-  header.className = 'phase-header';
-  const badge = document.createElement('span');
-  badge.className = 'phase-badge';
-  badge.style.background = phase.color;
-  badge.style.color = phase.textColor;
-  badge.style.border = `0.5px solid ${phase.borderColor}`;
-  badge.textContent = phase.days;
-  const title = document.createElement('span');
-  title.className = 'phase-title';
-  title.textContent = phase.name;
-  header.appendChild(badge);
-  header.appendChild(title);
-  phDiv.appendChild(header);
-
-  const grid = document.createElement('div');
-  grid.className = 'days-grid';
-
-  phase.days_data.forEach((day, di) => {
-    const card = document.createElement('div');
-    card.className = 'day-card';
-    card.dataset.phase = pi;
-    card.dataset.day = di;
-
-    const num = document.createElement('div');
-    num.className = 'day-num';
-    num.textContent = day.d;
-
-    const t = document.createElement('div');
-    t.className = 'day-title';
-    t.textContent = day.title;
-
-    const tag = document.createElement('span');
-    tag.className = 'day-tag';
-    tag.style.background = phase.tagBg;
-    tag.style.color = phase.tagText;
-    tag.textContent = day.tag;
-
-    card.appendChild(num);
-    card.appendChild(t);
-    card.appendChild(tag);
-    grid.appendChild(card);
-
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.day-card').forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      showDetail(phase, day);
+function renderCards() {
+  phases.forEach(phase => {
+    const grid = document.getElementById(`grid-p${phase.id}`);
+    grid.innerHTML = '';
+    phase.days.forEach((day, idx) => {
+      const key = `p${phase.id}-d${idx}`;
+      const done = completedDays.includes(key);
+      const isSelected = selectedDayKey === key;
+      const card = document.createElement('div');
+      card.className = `day-card p-4 ${isSelected ? 'selected' : ''}`;
+      if (done) card.style.opacity = '0.6';
+      card.innerHTML = `
+        <div class="flex justify-between items-start mb-2">
+          <span style="font-size:11px;color:#7070A0;font-weight:500">${day.d}</span>
+          ${done ? '<span style="font-size:10px;color:#10B981;background:rgba(16,185,129,0.1);padding:2px 7px;border-radius:10px">✓ Fait</span>' : ''}
+        </div>
+        <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:#E2E2EE;margin-bottom:8px;line-height:1.35">${day.title}</div>
+        <div class="flex items-center justify-between">
+          <span class="tag-pill" style="background:${phase.tagBg};color:${phase.tagColor}">${day.tag}</span>
+          <span style="font-size:11px;color:#7070A0">${day.duration}</span>
+        </div>
+      `;
+      card.onclick = () => selectDay(phase, day, key, card);
+      grid.appendChild(card);
     });
   });
+}
 
-  phDiv.appendChild(grid);
-  phasesContainer.appendChild(phDiv);
+function selectDay(phase, day, key, cardEl) {
+  // Deselect all
+  document.querySelectorAll('.day-card').forEach(c => c.classList.remove('selected'));
+  cardEl.classList.add('selected');
+  selectedDayKey = key;
+
+  const panel = document.getElementById('detail-panel');
+  const content = document.getElementById('detail-content');
+  panel.classList.remove('hidden');
+  panel.style.borderColor = phase.borderColor;
+
+  content.innerHTML = `
+    <div class="fade-in-up">
+      <!-- Header -->
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <div style="font-size:11px;color:#7070A0;margin-bottom:4px;letter-spacing:0.05em">${day.d} · ${day.duration} de pratique</div>
+          <h3 style="font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#E2E2EE;margin:0">${day.title}</h3>
+        </div>
+        <div class="flex gap-2">
+          <span class="tag-pill" style="font-size:12px;background:${phase.tagBg};color:${phase.tagColor};padding:5px 12px">${day.tag}</span>
+          <span class="tag-pill" style="font-size:12px;background:rgba(255,255,255,0.06);color:#7070A0;padding:5px 12px">${day.valeur}</span>
+        </div>
+      </div>
+
+      <!-- 3 col layout -->
+      <div class="grid gap-4 mb-6" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+        <!-- Objectifs -->
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px">
+          <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:#7070A0;margin-bottom:10px">OBJECTIFS</div>
+          ${day.objectifs.map(o => `
+            <div class="check-item">
+              <div class="check-dot"></div>
+              <span style="font-size:13px;color:#B0B0C8;line-height:1.5">${o}</span>
+            </div>`).join('')}
+        </div>
+
+        <!-- Outils -->
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px">
+          <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:#7070A0;margin-bottom:10px">OUTILS DU JOUR</div>
+          ${day.outils.map(o => `
+            <div style="display:flex;align-items:center;gap:8px;padding:5px 0">
+              <div style="width:5px;height:5px;border-radius:50%;background:${phase.color};flex-shrink:0"></div>
+              <span style="font-size:13px;color:#B0B0C8">${o}</span>
+            </div>`).join('')}
+        </div>
+
+        <!-- Tips -->
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px">
+          <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:#7070A0;margin-bottom:10px">TIPS PRO</div>
+          ${day.tips.map(t => `
+            <div class="check-item">
+              <div style="width:6px;height:6px;border-radius:50%;background:#A78BFA;margin-top:7px;flex-shrink:0"></div>
+              <span style="font-size:13px;color:#B0B0C8;line-height:1.5">${t}</span>
+            </div>`).join('')}
+        </div>
+      </div>
+
+      <!-- Exercice -->
+      <div style="background:rgba(249,115,22,0.07);border:1px solid rgba(249,115,22,0.2);border-radius:12px;padding:16px;margin-bottom:14px">
+        <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:#F97316;margin-bottom:8px">EXERCICE DU JOUR</div>
+        <p style="font-size:14px;color:#E2E2EE;line-height:1.6;margin:0">${day.exercice}</p>
+      </div>
+
+      <!-- Client quote -->
+      <div class="client-quote mb-6">
+        <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:#10B981;margin-bottom:6px">CAS CLIENT RÉEL</div>
+        <p style="font-size:13px;color:#B0B0C8;line-height:1.6;margin:0;font-style:italic">${day.client}</p>
+      </div>
+
+      <!-- CTA row -->
+      <div class="flex flex-wrap gap-3 items-center">
+        <button class="action-btn" onclick="openLesson('${day.d.replace(/'/g,"\\'")}', '${day.title.replace(/'/g,"\\'")}', ${phase.id})">
+          Démarrer cette session →
+        </button>
+        <button class="secondary-btn" onclick="markDone('${key}')">
+          ${completedDays.includes(key) ? '✓ Marquer non terminé' : '✓ Marquer comme fait'}
+        </button>
+        <span style="font-size:12px;color:#7070A0;margin-left:4px">Ressource : ${day.ressources}</span>
+      </div>
+    </div>
+  `;
+
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function markDone(key) {
+  if (completedDays.includes(key)) {
+    completedDays = completedDays.filter(k => k !== key);
+  } else {
+    completedDays.push(key);
+  }
+  localStorage.setItem('make-completed', JSON.stringify(completedDays));
+  updateProgress();
+  renderCards();
+  // Re-select to refresh button text
+  const [_, phaseStr, dayStr] = key.match(/p(\d+)-d(\d+)/);
+  const phase = phases[parseInt(phaseStr)-1];
+  const day = phase.days[parseInt(dayStr)];
+  const cards = document.querySelectorAll(`.day-card`);
+  cards.forEach(c => {
+    if (c.classList.contains('selected')) {
+      // find the card again
+    }
+  });
+}
+
+function updateProgress() {
+  const total = phases.reduce((s, p) => s + p.days.length, 0);
+  const done = completedDays.length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progress-pct').textContent = `${done} / ${total} jours`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+// ========== LESSON MODAL ==========
+function openLesson(dayLabel, title, phaseId) {
+  const phase = phases[phaseId - 1];
+  const day = phase.days.find(d => d.d === dayLabel);
+  if (!day) return;
+
+  const modal = document.getElementById('modal');
+  const content = document.getElementById('modal-content');
+
+  const stepItems = [
+    { step: "1", label: "Mise en place", detail: `Ouvre Make.com et crée un nouveau scénario vide. Nomme-le : "${day.d} - ${day.title}". Ouvre aussi les outils nécessaires : ${day.outils.join(', ')}.` },
+    { step: "2", label: "Comprends l'objectif", detail: `Aujourd'hui tu vas construire : ${day.exercice}. Prends 5 minutes pour dessiner le flux sur papier avant de coder.` },
+    { step: "3", label: "Construis le scénario", detail: `Suis les objectifs un par un :\n${day.objectifs.map((o, i) => `${i+1}. ${o}`).join('\n')}` },
+    { step: "4", label: "Teste & débogue", detail: `Clique "Run once" pour tester. Vérifie chaque module. Si erreur → consulte les logs Make (icône ? sur le module). Ajoute un error handler.` },
+    { step: "5", label: "Documente", detail: `Prends une capture du scénario. Écris 3 lignes de doc : ce que ça fait, comment le modifier, les credentials utilisées. Utile pour la livraison client.` }
+  ];
+
+  content.innerHTML = `
+    <div style="margin-bottom:20px">
+      <div style="font-size:11px;color:#7070A0;letter-spacing:0.05em;margin-bottom:6px">${day.d} · Session de travail</div>
+      <h3 style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:#E2E2EE;margin:0 0 6px">${title}</h3>
+      <span class="tag-pill" style="background:${phase.tagBg};color:${phase.tagColor};font-size:12px;padding:4px 10px">${day.tag}</span>
+    </div>
+
+    <!-- Exercice recap -->
+    <div style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.25);border-radius:10px;padding:14px;margin-bottom:20px">
+      <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:#F97316;margin-bottom:6px">CE QUE TU VAS CONSTRUIRE</div>
+      <p style="font-size:14px;color:#E2E2EE;margin:0;line-height:1.6">${day.exercice}</p>
+    </div>
+
+    <!-- Step by step -->
+    <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:#7070A0;margin-bottom:14px">PLAN DE SESSION</div>
+    <div style="display:flex;flex-direction:column;gap:0">
+      ${stepItems.map((s, i) => `
+        <div style="display:flex;gap:14px;padding-bottom:${i < stepItems.length-1 ? '16px' : '0'}">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+            <div style="width:28px;height:28px;border-radius:50%;background:${phase.colorLight};border:1px solid ${phase.borderColor};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <span style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:${phase.color}">${s.step}</span>
+            </div>
+            ${i < stepItems.length-1 ? `<div style="width:1px;flex:1;background:rgba(255,255,255,0.07);margin-top:4px"></div>` : ''}
+          </div>
+          <div style="padding-top:4px;padding-bottom:${i < stepItems.length-1 ? '0' : '0'}">
+            <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#E2E2EE;margin-bottom:4px">${s.label}</div>
+            <p style="font-size:13px;color:#7070A0;line-height:1.6;margin:0;white-space:pre-line">${s.detail}</p>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- Tips -->
+    <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:10px;padding:14px;margin-top:20px;margin-bottom:20px">
+      <div style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:#A78BFA;margin-bottom:8px">TIPS PROS</div>
+      ${day.tips.map(t => `<div style="display:flex;gap:8px;padding:3px 0"><span style="color:#A78BFA">→</span><span style="font-size:13px;color:#B0B0C8;line-height:1.5">${t}</span></div>`).join('')}
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="https://make.com" target="_blank" style="background:linear-gradient(135deg,#F97316,#EA580C);color:white;font-family:'Syne',sans-serif;font-weight:600;border:none;border-radius:10px;padding:11px 20px;cursor:pointer;font-size:13px;text-decoration:none;display:inline-block">
+        Ouvrir Make.com →
+      </a>
+      <button onclick="closeModal()" class="secondary-btn">Fermer</button>
+    </div>
+  `;
+
+  modal.classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.add('hidden');
+}
+
+// Close modal on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
 });
 
-function showDetail(phase, day) {
-  detailPanel.style.display = 'block';
-  detailPanel.innerHTML = `
-    <div class="detail-title">${day.d} — ${day.title}</div>
-    <div class="detail-section">
-      <div class="detail-label">Objectifs du jour</div>
-      <ul class="detail-list">${day.objectifs.map(o => `<li>${o}</li>`).join('')}</ul>
-    </div>
-    <div class="detail-section">
-      <div class="detail-label">Exercice pratique</div>
-      <ul class="detail-list"><li>${day.exercice}</li></ul>
-    </div>
-    <div class="detail-section">
-      <div class="detail-label">Contexte client réel</div>
-      <div class="client-box">${day.client}</div>
-    </div>
-    <button class="ask-btn" onclick="sendPrompt('${day.prompt.replace(/'/g, "\\'")}')">Démarrer ce jour ↗</button>
-  `;
-  detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+// ========== PHASE SWITCH ==========
+function showPhase(n) {
+  currentPhase = n;
+  [1,2,3].forEach(i => {
+    document.getElementById(`phase-${i}`).classList.remove('active');
+    const tab = document.getElementById(`tab-p${i}`);
+    tab.classList.remove('active-p1','active-p2','active-p3');
+    tab.style.background = 'rgba(255,255,255,0.04)';
+    tab.style.borderColor = 'rgba(255,255,255,0.08)';
+    tab.style.color = '#7070A0';
+  });
+  document.getElementById(`phase-${n}`).classList.add('active');
+  const tab = document.getElementById(`tab-p${n}`);
+  tab.classList.add(`active-p${n}`);
+
+  // Hide detail panel when switching phases
+  document.getElementById('detail-panel').classList.add('hidden');
+  selectedDayKey = null;
 }
+
+// ========== INIT ==========
+renderCards();
+updateProgress();
 </script>
+</body>
+</html>
