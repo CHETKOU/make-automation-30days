@@ -1,0 +1,313 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.wrap { padding: 1.5rem 0; }
+.phase-header {
+  display: flex; align-items: center; gap: 10px;
+  margin: 1.5rem 0 0.75rem;
+}
+.phase-badge {
+  font-size: 11px; font-weight: 500; padding: 3px 10px;
+  border-radius: 20px; white-space: nowrap;
+}
+.phase-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+.days-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px; margin-bottom: 0.5rem;
+}
+.day-card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 0.75rem 1rem; cursor: pointer;
+  transition: border-color 0.15s;
+}
+.day-card:hover { border-color: var(--color-border-secondary); }
+.day-card.active { border: 1.5px solid #7F77DD; }
+.day-num { font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 4px; }
+.day-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); line-height: 1.4; }
+.day-tag {
+  display: inline-block; font-size: 10px; padding: 2px 7px;
+  border-radius: 10px; margin-top: 6px;
+}
+.detail-panel {
+  background: var(--color-background-secondary);
+  border-radius: var(--border-radius-lg);
+  border: 0.5px solid var(--color-border-tertiary);
+  padding: 1.25rem 1.5rem; margin-top: 0.75rem;
+}
+.detail-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.75rem; }
+.detail-section { margin-bottom: 0.75rem; }
+.detail-label { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.detail-list { list-style: none; padding: 0; }
+.detail-list li { font-size: 13px; color: var(--color-text-secondary); padding: 3px 0; padding-left: 14px; position: relative; line-height: 1.5; }
+.detail-list li::before { content: "→"; position: absolute; left: 0; color: #7F77DD; font-size: 11px; top: 4px; }
+.client-box {
+  background: var(--color-background-primary);
+  border-left: 3px solid #1D9E75;
+  border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+  padding: 8px 12px; font-size: 13px; color: var(--color-text-secondary);
+  font-style: italic; margin-top: 8px;
+}
+.ask-btn {
+  margin-top: 1rem; font-size: 13px; padding: 7px 16px;
+  border-radius: var(--border-radius-md); cursor: pointer;
+  background: transparent; border: 0.5px solid var(--color-border-secondary);
+  color: var(--color-text-primary);
+}
+.ask-btn:hover { background: var(--color-background-secondary); }
+.prog-bar-wrap { display: flex; gap: 3px; margin-bottom: 1.5rem; }
+.prog-seg { height: 4px; border-radius: 2px; flex: 1; }
+</style>
+
+<div class="wrap">
+
+<div class="prog-bar-wrap" id="progbar"></div>
+
+<div id="phases-container"></div>
+<div id="detail-panel" style="display:none"></div>
+</div>
+
+<script>
+const phases = [
+  {
+    name: "Phase 1 — Fondations", days: "J1–J7",
+    color: "#EEEDFE", textColor: "#534AB7", borderColor: "#AFA9EC",
+    tagBg: "#EEEDFE", tagText: "#534AB7",
+    days_data: [
+      { d: "J1", title: "C'est quoi Make ?", tag: "Théorie",
+        objectifs: ["Comprendre la différence Make vs Zapier vs n8n", "Installer et configurer son compte Make gratuit", "Découvrir l'interface : scénarios, modules, connexions"],
+        exercice: "Créer ton premier scénario : quand un formulaire Google est soumis → envoyer un email Gmail",
+        client: "Un client te demande : 'C'est quoi Make ?' → tu sais lui répondre avec des exemples concrets.",
+        prompt: "Explique-moi Make.com en détail pour un débutant qui veut faire du freelance"
+      },
+      { d: "J2", title: "Modules & Connexions", tag: "Pratique",
+        objectifs: ["Connecter Gmail, Google Sheets, Airtable", "Comprendre triggers vs actions", "Gérer les erreurs basiques"],
+        exercice: "Connecter 3 apps entre elles : Typeform → Google Sheets → Slack notification",
+        client: "Projet réel : collecte de leads automatique depuis un formulaire vers une base de données",
+        prompt: "Donne-moi un exercice pratique Make.com pour connecter Typeform, Google Sheets et Slack"
+      },
+      { d: "J3", title: "Gestion des données", tag: "Pratique",
+        objectifs: ["Mapper les champs entre modules", "Filtres et conditions (Router)", "Transformer du texte, des dates, des chiffres"],
+        exercice: "Router différents types de leads vers différentes feuilles selon leur budget",
+        client: "Un client veut trier ses prospects automatiquement selon leur taille d'entreprise",
+        prompt: "Comment utiliser le Router dans Make.com avec un exemple de tri de leads par budget ?"
+      },
+      { d: "J4", title: "Gestion des erreurs", tag: "Pro",
+        objectifs: ["Comprendre les erreurs communes dans Make", "Mettre en place des error handlers", "Créer des alertes quand un scénario échoue"],
+        exercice: "Ajouter un error handler qui t'envoie un SMS Twilio si le scénario plante",
+        client: "Ton client appelle à 3h du matin car son scénario a planté — tu dois savoir éviter ça",
+        prompt: "Comment gérer les erreurs dans Make.com comme un pro ? Montre-moi les error handlers"
+      },
+      { d: "J5", title: "Webhooks entrants", tag: "Avancé",
+        objectifs: ["Créer un webhook Make", "Recevoir des données externes", "Tester avec Postman ou curl"],
+        exercice: "Recevoir un webhook depuis Stripe et créer une ligne dans Google Sheets à chaque paiement",
+        client: "Projet freelance : notifier le client sur Slack à chaque nouveau paiement reçu",
+        prompt: "Tutoriel complet webhooks entrants sur Make.com avec exemple Stripe"
+      },
+      { d: "J6", title: "Webhooks sortants & HTTP", tag: "Avancé",
+        objectifs: ["Faire des requêtes HTTP vers des APIs", "Authentification Bearer Token / API Key", "Parser une réponse JSON"],
+        exercice: "Appeler l'API Notion pour créer automatiquement des pages depuis un Google Sheet",
+        client: "Intégrer n'importe quelle app non native Make via son API — compétence très vendue",
+        prompt: "Comment faire des requêtes HTTP dans Make.com pour intégrer une API externe ?"
+      },
+      { d: "J7", title: "Projet semaine 1", tag: "Projet",
+        objectifs: ["Construire un système complet de bout en bout", "Documenter le scénario pour un client", "Calculer le temps économisé"],
+        exercice: "Système de gestion des leads : formulaire → CRM Airtable → email de bienvenue personnalisé → notification Slack",
+        client: "Livrable freelance : automatisation de la capture et qualification de leads (valeur : 300–600€)",
+        prompt: "Aide-moi à construire un système complet de gestion des leads sur Make.com étape par étape"
+      }
+    ]
+  },
+  {
+    name: "Phase 2 — Projets clients réels", days: "J8–J21",
+    color: "#E1F5EE", textColor: "#0F6E56", borderColor: "#5DCAA5",
+    tagBg: "#E1F5EE", tagText: "#0F6E56",
+    days_data: [
+      { d: "J8–9", title: "Projet : Automatiser les factures", tag: "Finance",
+        objectifs: ["Recevoir une commande → générer une facture PDF", "Envoyer par email au client", "Logger dans Google Sheets ou Airtable"],
+        exercice: "Typeform ou Jotform → Make → générer PDF (PDFMonkey) → Gmail → Airtable",
+        client: "Cas réel : 'Mon client passe 4h/semaine à créer des factures manuellement'",
+        prompt: "Construis avec moi un scénario Make.com complet pour automatiser la génération et l'envoi de factures PDF"
+      },
+      { d: "J10–11", title: "Projet : Onboarding client", tag: "CRM",
+        objectifs: ["Automatiser l'accueil d'un nouveau client", "Créer ses accès, envoyer ses documents", "Notifier l'équipe interne"],
+        exercice: "Stripe paiement → créer profil Notion + Google Drive folder + email bienvenue + Slack alerte",
+        client: "Agences, coachs, SaaS : économisent 2h par nouveau client",
+        prompt: "Crée un scénario Make.com d'onboarding automatique pour un coach après un paiement Stripe"
+      },
+      { d: "J12–13", title: "Projet : Suivi des relances", tag: "Ventes",
+        objectifs: ["Automatiser les relances de devis non signés", "Envoyer des séquences d'emails espacées", "Stopper si le client répond"],
+        exercice: "Airtable (devis) → Make scheduler → email relance J+3, J+7, J+14 → stopper si statut change",
+        client: "PME : 'Je perds des clients car j'oublie de relancer mes devis'",
+        prompt: "Comment créer une séquence automatique de relances dans Make.com avec Airtable ?"
+      },
+      { d: "J14–15", title: "Projet : Gestion des réseaux sociaux", tag: "Marketing",
+        objectifs: ["Programmer des publications multi-plateformes", "Recycler du contenu automatiquement", "Monitorer les mentions de marque"],
+        exercice: "Google Sheet de contenu → Make scheduler → publier sur Twitter, LinkedIn, Facebook en même temps",
+        client: "Créateurs de contenu, agences marketing : valeur 200–500€/mois",
+        prompt: "Automatise la publication de contenu sur plusieurs réseaux sociaux avec Make.com"
+      },
+      { d: "J16–17", title: "Projet : Support client IA", tag: "IA",
+        objectifs: ["Connecter OpenAI/Claude à Make", "Répondre automatiquement aux emails entrants", "Escalader les cas complexes à un humain"],
+        exercice: "Gmail entrant → Make → OpenAI API (classer + répondre) → si complexe → notifier sur Slack",
+        client: "E-commerce, SaaS : 'Je reçois 50 emails/jour, je veux automatiser les FAQ'",
+        prompt: "Crée un système de support client IA avec Make.com et OpenAI pour répondre aux emails automatiquement"
+      },
+      { d: "J18–19", title: "Projet : Rapport hebdo automatique", tag: "Analytics",
+        objectifs: ["Collecter des données de plusieurs sources", "Générer un rapport formaté", "Envoyer par email chaque lundi matin"],
+        exercice: "Google Analytics + Stripe + Airtable → Make (lundi 8h) → créer Google Doc rapport → email CEO",
+        client: "Dirigeants d'entreprise : 'Je veux un rapport automatique sans demander à mon équipe'",
+        prompt: "Comment créer un rapport hebdomadaire automatique avec Make.com qui agrège des données de plusieurs sources ?"
+      },
+      { d: "J20–21", title: "Projet : E-commerce automation", tag: "E-commerce",
+        objectifs: ["Gérer le cycle de vie commande", "Alertes stock faible", "Relances panier abandonné"],
+        exercice: "Shopify ordre → Make → mettre à jour Airtable + email confirmation + si stock<5 → alerter fournisseur",
+        client: "Boutique Shopify : 'Je veux automatiser toute la logistique de mes commandes'",
+        prompt: "Automatise un e-commerce Shopify avec Make.com : commandes, stock et relances paniers abandonnés"
+      }
+    ]
+  },
+  {
+    name: "Phase 3 — Niveau Expert & Freelance", days: "J22–J30",
+    color: "#FAEEDA", textColor: "#854F0B", borderColor: "#EF9F27",
+    tagBg: "#FAEEDA", tagText: "#854F0B",
+    days_data: [
+      { d: "J22–23", title: "Variables, Datastores & itération", tag: "Expert",
+        objectifs: ["Utiliser les Datastores Make pour stocker de l'état", "Itérer sur des tableaux (Array aggregator)", "Construire des scénarios avec mémoire"],
+        exercice: "Système de scoring de leads qui s'accumule dans un Datastore au fil des interactions",
+        client: "Automatisations complexes multi-étapes qui 'se souviennent' du contexte",
+        prompt: "Explique-moi les Datastores et l'itération dans Make.com avec un exemple de scoring de leads"
+      },
+      { d: "J24", title: "Scénarios imbriqués & modularité", tag: "Expert",
+        objectifs: ["Appeler un scénario depuis un autre (sous-scénarios)", "Créer des modules réutilisables", "Organiser de gros projets proprement"],
+        exercice: "Créer un scénario 'send-email' réutilisable appelé par 5 autres scénarios différents",
+        client: "Pour des clients avec des automatisations complexes — maintenance facile = clients fidèles",
+        prompt: "Comment créer des scénarios modulaires et réutilisables dans Make.com ?"
+      },
+      { d: "J25", title: "Tarifer & vendre une mission Make", tag: "Business",
+        objectifs: ["Calculer le ROI pour un client", "Structures tarifaires : fixe, mensuel, au résultat", "Rédiger une proposition commerciale"],
+        exercice: "Rédiger une proposition pour le projet de factures automatiques (J8–9) avec tarif",
+        client: "Savoir se vendre : 500–2000€ one-shot + 100–500€/mois maintenance",
+        prompt: "Comment tarifer et vendre une mission d'automatisation Make.com à un client PME ?"
+      },
+      { d: "J26", title: "Livrer & documenter un projet", tag: "Business",
+        objectifs: ["Créer une documentation claire pour le client", "Faire une vidéo Loom de présentation", "Checklist de livraison professionnelle"],
+        exercice: "Documenter le scénario de facturation (J8–9) comme si tu le livrais à un vrai client",
+        client: "La documentation professionnelle justifie des prix élevés et crée de la confiance",
+        prompt: "Quelle est la meilleure façon de documenter et livrer un projet Make.com à un client ?"
+      },
+      { d: "J27", title: "Maintenance & monitoring", tag: "Pro",
+        objectifs: ["Mettre en place des alertes de surveillance", "Gérer les mises à jour d'API clientes", "Créer un tableau de bord d'état des scénarios"],
+        exercice: "Scénario qui surveille tous tes autres scénarios et t'alerte si l'un est désactivé ou en erreur",
+        client: "Offrir du support mensuel = revenus récurrents, la clé du freelance stable",
+        prompt: "Comment surveiller et maintenir des scénarios Make.com pour des clients en production ?"
+      },
+      { d: "J28", title: "Projet capstone : Audit complet", tag: "Projet",
+        objectifs: ["Analyser les besoins d'une entreprise fictive", "Cartographier tous les processus à automatiser", "Prioriser et chiffrer chaque automatisation"],
+        exercice: "Auditer 'BricoShop' : e-commerce, 3 employés, 100 commandes/mois — quoi automatiser en priorité ?",
+        client: "Compétence rare et valorisée : savoir identifier les opportunités d'automatisation chez un client",
+        prompt: "Aide-moi à faire un audit d'automatisation complet pour une PME e-commerce avec Make.com"
+      },
+      { d: "J29–30", title: "Construire ton offre freelance", tag: "Lancement",
+        objectifs: ["Définir ta niche (e-commerce ? agences ? coachs ?)", "Créer 3 offres packagées avec prix clairs", "Rédiger ta page LinkedIn / Malt / Upwork"],
+        exercice: "Publier ton profil Malt ou LinkedIn avec tes 3 offres Make et 2 études de cas (J7 + J8)",
+        client: "À la fin du jour 30, tu as un profil, des offres, des projets livrables — tu peux prospecter",
+        prompt: "Aide-moi à créer mon offre freelance Make.com avec 3 packages tarifés pour me lancer"
+      }
+    ]
+  }
+];
+
+const progbar = document.getElementById('progbar');
+const phasesContainer = document.getElementById('phases-container');
+const detailPanel = document.getElementById('detail-panel');
+
+let selectedDay = null;
+
+phases.forEach((phase, pi) => {
+  phase.days_data.forEach(() => {
+    const seg = document.createElement('div');
+    seg.className = 'prog-seg';
+    seg.style.background = phase.borderColor;
+    progbar.appendChild(seg);
+  });
+
+  const phDiv = document.createElement('div');
+
+  const header = document.createElement('div');
+  header.className = 'phase-header';
+  const badge = document.createElement('span');
+  badge.className = 'phase-badge';
+  badge.style.background = phase.color;
+  badge.style.color = phase.textColor;
+  badge.style.border = `0.5px solid ${phase.borderColor}`;
+  badge.textContent = phase.days;
+  const title = document.createElement('span');
+  title.className = 'phase-title';
+  title.textContent = phase.name;
+  header.appendChild(badge);
+  header.appendChild(title);
+  phDiv.appendChild(header);
+
+  const grid = document.createElement('div');
+  grid.className = 'days-grid';
+
+  phase.days_data.forEach((day, di) => {
+    const card = document.createElement('div');
+    card.className = 'day-card';
+    card.dataset.phase = pi;
+    card.dataset.day = di;
+
+    const num = document.createElement('div');
+    num.className = 'day-num';
+    num.textContent = day.d;
+
+    const t = document.createElement('div');
+    t.className = 'day-title';
+    t.textContent = day.title;
+
+    const tag = document.createElement('span');
+    tag.className = 'day-tag';
+    tag.style.background = phase.tagBg;
+    tag.style.color = phase.tagText;
+    tag.textContent = day.tag;
+
+    card.appendChild(num);
+    card.appendChild(t);
+    card.appendChild(tag);
+    grid.appendChild(card);
+
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.day-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      showDetail(phase, day);
+    });
+  });
+
+  phDiv.appendChild(grid);
+  phasesContainer.appendChild(phDiv);
+});
+
+function showDetail(phase, day) {
+  detailPanel.style.display = 'block';
+  detailPanel.innerHTML = `
+    <div class="detail-title">${day.d} — ${day.title}</div>
+    <div class="detail-section">
+      <div class="detail-label">Objectifs du jour</div>
+      <ul class="detail-list">${day.objectifs.map(o => `<li>${o}</li>`).join('')}</ul>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">Exercice pratique</div>
+      <ul class="detail-list"><li>${day.exercice}</li></ul>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">Contexte client réel</div>
+      <div class="client-box">${day.client}</div>
+    </div>
+    <button class="ask-btn" onclick="sendPrompt('${day.prompt.replace(/'/g, "\\'")}')">Démarrer ce jour ↗</button>
+  `;
+  detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
